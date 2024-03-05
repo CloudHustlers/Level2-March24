@@ -76,7 +76,7 @@ SELECT
   opp_points_game AS opposing_team_points,
   ABS(points_game - opp_points_game) AS point_difference
 FROM `bigquery-public-data.ncaa_basketball.mbb_teams_games_sr`
-WHERE season > 2015 AND tournament_type = 'National Championship'
+WHERE season > 2015 AND tournament_type = "National Championship"
 ORDER BY point_difference DESC
 LIMIT 5;
 '

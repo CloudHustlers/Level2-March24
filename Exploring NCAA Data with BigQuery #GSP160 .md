@@ -61,7 +61,9 @@ WHERE season > 2010
 ORDER BY point_total DESC
 LIMIT 5;
 '
-bq query --use_legacy_sql=false '
+```
+### Go to bigquery and run the down command
+```cmd
 #standardSQL
 #biggest point difference in a championship game
 SELECT
@@ -76,8 +78,7 @@ SELECT
   opp_points_game AS opposing_team_points,
   ABS(points_game - opp_points_game) AS point_difference
 FROM `bigquery-public-data.ncaa_basketball.mbb_teams_games_sr`
-WHERE season > 2015 AND tournament_type = "National Championship"
+WHERE season > 2015 AND tournament_type = 'National Championship'
 ORDER BY point_difference DESC
 LIMIT 5;
-'
 ```

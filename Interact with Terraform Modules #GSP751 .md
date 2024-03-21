@@ -8,7 +8,7 @@ cd terraform-google-network
 git checkout tags/v6.0.1 -b v6.0.1
 gcloud config list --format 'value(core.project)'
 cd examples/simple_project
-cat > variables.tf <<EOF_END
+cat > variables.tf <<EOF
 variable "project_id" {
   description = "The project ID to host the network in"
   default     = "$DEVSHELL_PROJECT_ID"
@@ -18,7 +18,7 @@ variable "network_name" {
   description = "The name of the VPC network being created"
   default     = "example-vpc"
 }
-EOF_END
+EOF
 terraform init
 terraform apply --auto-approve
 terraform destroy --auto-approve
@@ -28,7 +28,7 @@ touch main.tf
 mkdir -p modules/gcs-static-website-bucket
 cd modules/gcs-static-website-bucket
 touch website.tf variables.tf outputs.tf
-cat > website.tf <<EOF_END
+cat > website.tf <<EOF
 resource "google_storage_bucket" "bucket" {
   name               = var.name
   project            = var.project_id
@@ -70,8 +70,8 @@ resource "google_storage_bucket" "bucket" {
     }
   }
 }
-EOF_END
-cat > variables.tf <<EOF_END
+EOF
+cat > variables.tf <<EOF
 variable "name" {
   description = "The name of the bucket."
   type        = string
@@ -135,29 +135,19 @@ variable "encryption" {
 variable "lifecycle_rules" {
   description = "The bucket's Lifecycle Rules configuration."
   type = list(object({
-    # Object with keys:
-    # - type - The type of the action of this Lifecycle Rule. Supported values: Delete and SetStorageClass.
-    # - storage_class - (Required if action type is SetStorageClass) The target Storage Class of objects affected by this Lifecycle Rule.
-    action = any
-    # Object with keys:
-    # - age - (Optional) Minimum age of an object in days to satisfy this condition.
-    # - created_before - (Optional) Creation date of an object in RFC 3339 (e.g. 2017-06-13) to satisfy this condition.
-    # - with_state - (Optional) Match to live and/or archived objects. Supported values include: "LIVE", "ARCHIVED", "ANY".
-    # - matches_storage_class - (Optional) Storage Class of objects to satisfy this condition. Supported values include: MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, STANDARD, DURABLE_REDUCED_AVAILABILITY.
-    # - num_newer_versions - (Optional) Relevant only for versioned objects. The number of newer versions of an object to satisfy this condition.
     condition = any
   }))
   default = []
 }
-EOF_END
-cat > outputs.tf <<EOF_END
+EOF
+cat > outputs.tf <<EOF
 output "bucket" {
   description = "The created storage bucket"
   value       = google_storage_bucket.bucket
 }
-EOF_END
+EOF
 cd ~
-cat > main.tf <<EOF_END
+cat > main.tf <<EOF
 module "gcs-static-website-bucket" {
   source = "./modules/gcs-static-website-bucket"
   name       = var.name
@@ -173,14 +163,14 @@ module "gcs-static-website-bucket" {
     }
   }]
 }
-EOF_END
-cat > outputs.tf <<EOF_END
+EOF
+cat > outputs.tf <<EOF
 output "bucket-name" {
   description = "Bucket names."
   value       = "module.gcs-static-website-bucket.bucket"
 }
-EOF_END
-cat > variables.tf <<EOF_END
+EOF
+cat > variables.tf <<EOF
 variable "project_id" {
   description = "The ID of the project in which to provision resources."
   type        = string
@@ -191,7 +181,7 @@ variable "name" {
   type        = string
   default     = "$DEVSHELL_PROJECT_ID"
 }
-EOF_END
+EOF
 terraform init
 terraform apply --auto-approve
 cd ~

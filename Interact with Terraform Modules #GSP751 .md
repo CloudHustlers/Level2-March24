@@ -37,9 +37,11 @@ resource "google_storage_bucket" "bucket" {
   labels             = var.labels
   force_destroy      = var.force_destroy
   uniform_bucket_level_access = true
+
   versioning {
     enabled = var.versioning
   }
+
   dynamic "retention_policy" {
     for_each = var.retention_policy == null ? [] : [var.retention_policy]
     content {
@@ -47,12 +49,14 @@ resource "google_storage_bucket" "bucket" {
       retention_period = var.retention_policy.retention_period
     }
   }
+
   dynamic "encryption" {
     for_each = var.encryption == null ? [] : [var.encryption]
     content {
       default_kms_key_name = var.encryption.default_kms_key_name
     }
   }
+
   dynamic "lifecycle_rule" {
     for_each = var.lifecycle_rules
     content {
